@@ -10,8 +10,8 @@ Laravel based small business inventory tracking using Docker Environment
   - **mysql** - `:3306`
   - **php** - `:9000`
 4. Navigate in terminal to the cloned directory and run `docker-compose up -d`
-5. Run `docker ps` to check current container running
-  - ![docker-result](/docker-result.png)
+5. Run `docker ps` to check current container running:-
+  ![docker-result](/docker-result.png)
 6. Project URL:-
   - Laravel - `http://localhost:8080/`
   - phpmyadmin - `http://localhost:8081/`

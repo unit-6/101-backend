@@ -6,7 +6,7 @@ networks:
 services:
   site:
     image: nginx:stable-alpine
-    container_name: nginx
+    container_name: sbit_nginx
     ports:
       - "8080:80"
     volumes:
@@ -20,13 +20,15 @@ services:
 
   mysql:
     image: mysql:5.7.29
-    container_name: mysql
+    container_name: sbit_mysql
     restart: unless-stopped
     tty: true
     ports:
       - "3306:3306"
+    volumes:
+        - ./mysql:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: homestead
+      MYSQL_DATABASE: sbit_db
       MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
@@ -39,17 +41,31 @@ services:
     build:
       context: .
       dockerfile: php.dockerfile
-    container_name: php
+    container_name: sbit_php
     volumes:
       - ./src:/var/www/html:delegated
     ports:
       - "9000:9000"
     networks:
       - laravel
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    container_name: sbit_phpmyadmin
+    depends_on: 
+      - mysql
+    ports: 
+      - "8081:80"
+    environment: 
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: secret
+    networks: 
+      - laravel
 
   composer:
     image: composer:latest
-    container_name: composer
+    container_name: sbit_composer
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
@@ -61,7 +77,7 @@ services:
 
   npm:
     image: node:13.7
-    container_name: npm
+    container_name: sbit_npm
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
@@ -71,7 +87,7 @@ services:
     build:
       context: .
       dockerfile: php.dockerfile
-    container_name: artisan
+    container_name: sbit_artisan
     volumes:
       - ./src:/var/www/html:delegated
     depends_on:

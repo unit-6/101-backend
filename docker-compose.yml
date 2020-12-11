@@ -21,7 +21,6 @@ services:
   mysql:
     image: mysql:5.7.29
     container_name: sbit_mysql
-    restart: unless-stopped
     tty: true
     ports:
       - "3306:3306"
@@ -51,7 +50,6 @@ services:
   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    restart: always
     container_name: sbit_phpmyadmin
     depends_on: 
       - mysql

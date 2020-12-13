@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Merchant;
 use App\Product;
 use App\Sale;
+use App\Transaction;
 use Str;
 
 class MerchantsController extends Controller
@@ -141,6 +142,35 @@ class MerchantsController extends Controller
             return response()->json(["code"=>200, "message"=>"Sale created successfully."]);
         } else {
             return response()->json(["code"=>400, "message"=>"Sale create failed."]);
+        }
+    }
+
+    public function addTrx(Request $request)
+    {
+        $request->validate([
+            'qty' => ['required', 'integer', 'max:99999999999'],
+            'totalPrice' => ['required', 'numeric', 'max:999999.99'],
+            'currencyCode' => ['required', 'string', 'max:255'],
+            'currencySymbol' => ['required', 'string', 'max:255'],
+            'product_id' => ['required', 'integer', 'max:99999999999999999999'],
+            'sale_id' => ['required', 'integer', 'max:99999999999999999999']
+        ]);
+
+        $transaction = new Transaction;
+
+        $transaction->qty = $request['qty'];
+        $transaction->totalPrice = $request['totalPrice'];
+        $transaction->currencyCode = $request['currencyCode'];
+        $transaction->currencySymbol = $request['currencySymbol'];
+        $transaction->product_id = $request['product_id'];
+        $transaction->sale_id = $request['sale_id'];
+
+        $is_saved = $transaction->save();
+
+        if($is_saved){
+            return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+        } else {
+            return response()->json(["code"=>400, "message"=>"Transaction record failed."]);
         }
     }
 }

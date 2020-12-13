@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Merchant;
 use App\Product;
+use App\Sale;
 use Str;
 
 class MerchantsController extends Controller
@@ -112,6 +113,34 @@ class MerchantsController extends Controller
             return response()->json(["code"=>200, "message"=>"Product edited successfully."]);
         } else {
             return response()->json(["code"=>400, "message"=>"Product edit failed."]);
+        }
+    }
+
+    public function startSales(Request $request)
+    {
+        $request->validate([
+            'cost' => ['required', 'numeric', 'max:999999.99'],
+            'profit' => ['required', 'numeric', 'max:999999.99'],
+            'currencyCode' => ['required', 'string', 'max:255'],
+            'currencySymbol' => ['required', 'string', 'max:255'],
+            'merchant_id' => ['required', 'integer', 'max:99999999999999999999']
+        ]);
+
+        $sale = new Sale;
+
+        $sale->cost = $request['cost'];
+        $sale->profit = $request['profit'];
+        $sale->currencyCode = $request['currencyCode'];
+        $sale->currencySymbol = $request['currencySymbol'];
+        $sale->status = 1;
+        $sale->merchant_id = $request['merchant_id'];
+
+        $is_saved = $sale->save();
+
+        if($is_saved){
+            return response()->json(["code"=>200, "message"=>"Sale created successfully."]);
+        } else {
+            return response()->json(["code"=>400, "message"=>"Sale create failed."]);
         }
     }
 }

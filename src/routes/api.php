@@ -20,4 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'merchant'], function(){
     Route::post('register', 'MerchantsController@register')->name('merchant.register');
     Route::post('addProduct', 'MerchantsController@addProduct')->name('merchant.addProduct');
+    Route::post('detailsProduct', 'MerchantsController@detailsProduct')->name('merchant.detailsProduct');
 });

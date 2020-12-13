@@ -69,4 +69,19 @@ class MerchantsController extends Controller
             return response()->json(["code"=>400, "message"=>"Product addition failed."]);
         }
     }
+
+    public function detailsProduct(Request $request)
+    {
+        $request->validate([
+            'id' => ['required', 'integer', 'max:99999999999999999999']
+        ]);
+
+        $product = Product::find($request->id);
+
+        if($product != null){
+            return response()->json(["code"=>200, "message"=>"Product found.", "data"=>$product]);
+        } else {
+            return response()->json(["code"=>400, "message"=>"Product not found."]);
+        }
+    }
 }

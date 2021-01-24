@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->integer('stockQty')->nullable();
             $table->boolean('isActive');
             $table->timestamps();
-            $table->bigInteger('merchant_id');
+            $table->string('merchant_id');
         });
     }
 

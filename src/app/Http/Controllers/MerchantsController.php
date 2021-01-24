@@ -50,7 +50,7 @@ class MerchantsController extends Controller
             'currencyCode' => ['required', 'string', 'max:255'],
             'currencySymbol' => ['required', 'string', 'max:255'],
             'stockQty' => ['required', 'integer', 'max:99999999999'],
-            'merchant_id' => ['required', 'integer', 'max:99999999999999999999']
+            'merchant_id' => ['required', 'string', 'exists:App\Merchant,key']
         ]);
 
         $product = new Product;
@@ -74,6 +74,10 @@ class MerchantsController extends Controller
 
     public function listProduct(Request $request)
     {
+        $request->validate([
+            'merchant_id' => ['required', 'string', 'exists:App\Merchant,key']
+        ]);
+
         $product = Product::where('merchant_id', $request->merchant_id)->get();
         $total = $product->count();
 
@@ -136,7 +140,7 @@ class MerchantsController extends Controller
             'profit' => ['required', 'numeric', 'max:999999.99'],
             'currencyCode' => ['required', 'string', 'max:255'],
             'currencySymbol' => ['required', 'string', 'max:255'],
-            'merchant_id' => ['required', 'integer', 'max:99999999999999999999']
+            'merchant_id' => ['required', 'string', 'exists:App\Merchant,key']
         ]);
 
         $sale = new Sale;

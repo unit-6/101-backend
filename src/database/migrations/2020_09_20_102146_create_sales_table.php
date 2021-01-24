@@ -21,7 +21,7 @@ class CreateSalesTable extends Migration
             $table->string('currencySymbol');
             $table->boolean('status');
             $table->timestamps();
-            $table->bigInteger('merchant_id');
+            $table->string('merchant_id');
         });
     }
 

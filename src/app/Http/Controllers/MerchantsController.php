@@ -74,7 +74,7 @@ class MerchantsController extends Controller
 
     public function listProduct(Request $request)
     {
-        $product = Product::where('merchant_id', $request->merchant_id);
+        $product = Product::where('merchant_id', $request->merchant_id)->get();
         $total = $product->count();
 
         if($total > 0){

@@ -72,6 +72,18 @@ class MerchantsController extends Controller
         }
     }
 
+    public function listProduct(Request $request)
+    {
+        $product = Product::where('merchant_id', $merchant_id);
+        $total = $product->count();
+
+        if($total > 0){
+            return response()->json(["code"=>200, "message"=>"Product listed successfully.", "data"=>$product, "total"=>$total]);
+        } else {
+            return response()->json(["code"=>400, "message"=>"This merchant has no product registered."]);
+        }
+    }
+
     public function detailsProduct(Request $request)
     {
         $request->validate([

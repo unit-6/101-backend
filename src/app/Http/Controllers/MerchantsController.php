@@ -8,6 +8,7 @@ use App\Merchant;
 use App\Product;
 use App\Sale;
 use App\Transaction;
+use DateTime;
 use Str;
 
 class MerchantsController extends Controller
@@ -167,7 +168,7 @@ class MerchantsController extends Controller
             'totalPrice' => ['required', 'numeric', 'max:999999.99'],
             'currencyCode' => ['required', 'string', 'max:255'],
             'currencySymbol' => ['required', 'string', 'max:255'],
-            'product_id' => ['required', 'integer', 'max:99999999999999999999'],
+            'product_id' => ['required', 'integer', 'exists:App\Product,id'],
             'sale_id' => ['required', 'integer', 'exists:App\Sale,id']
         ]);
 
@@ -242,6 +243,72 @@ class MerchantsController extends Controller
             }
         } else {
             return response()->json(["code"=>400, "message"=>"Failed to find sale with given id."]);
+        }
+    }
+
+    public function salesHistory(Request $request)
+    {
+        $request->validate([
+            'merchant_id' => ['required', 'string', 'exists:App\Merchant,key'],
+            'start_date' => ['required', 'date_format:Y-m-d'],
+            'end_date' => ['nullable', 'date_format:Y-m-d']
+        ]);
+
+        if($request->end_date != null) {
+            $sales = Sale::where('merchant_id', $request->merchant_id)
+                            ->whereBetween('created_at', [$request->start_date, $request->end_date])
+                            ->where('status', 0)
+                            ->get();
+        } else {
+            $sales = Sale::where('merchant_id', $request->merchant_id)
+                            ->where('created_at', 'LIKE', $request->start_date . '%')
+                            ->where('status', 0)
+                            ->get();
+        }
+
+        if($sales->count() > 0) {
+            $totCapital = 0;
+            $totProfit = 0;
+            $totDuration = 0;
+
+            foreach ($sales as $sale) {
+                $start = new DateTime($sale->created_at);
+                $end = new DateTime($sale->updated_at);
+                $interval = $start->diff($end);
+
+                $totCapital += $sale->cost;
+                $totProfit += $sale->profit;
+                $totDuration += (int) $interval->format('%s');
+                $totDuration += ((int) $interval->format('%i')) * 60;
+                $totDuration += ((int) $interval->format('%h')) * 60 * 60;
+                $totDuration += ((int) $interval->format('%d')) * 24 * 60 * 60;
+            }
+
+            $totSales = $totProfit + $totCapital;
+            $capitalBal = 0;    // What is this?
+
+            $durationObj = null;
+            $durationObj = (object) $durationObj;
+            $durationObj->seconds = (int) ($totDuration % 60);
+            $c_min = (int) ($totDuration / 60);
+            $durationObj->minutes = (int) ($c_min % 60);
+            $c_hour = (int) ($c_min / 60);
+            $durationObj->hours = (int) ($c_hour % 24);
+            $durationObj->days = (int) ($c_hour / 24);
+
+            return response()->json(
+                [
+                    "code"=>200,
+                    "message"=>"Ended sale(s) found for/between the specified date(s).",
+                    "capital"=>$totCapital,
+                    "sales"=>$totSales,
+                    "profit"=>$totProfit,
+                    "capital_bal"=>$capitalBal,
+                    "duration"=>$durationObj
+                ]
+            );
+        } else {
+            return response()->json(["code"=>400, "message"=>"No ended sale found for/between the specified date(s)."]);
         }
     }
 }

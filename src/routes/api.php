@@ -26,4 +26,5 @@ Route::group(['prefix' => 'merchant'], function(){
     Route::post('startSales', 'MerchantsController@startSales')->name('merchant.startSales');
     Route::post('addTrx', 'MerchantsController@addTrx')->name('merchant.addTrx');
     Route::post('endSales', 'MerchantsController@endSales')->name('merchant.endSales');
+    Route::post('salesHistory', 'MerchantsController@salesHistory')->name('merchant.salesHistory');
 });

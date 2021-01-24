@@ -171,21 +171,77 @@ class MerchantsController extends Controller
             'sale_id' => ['required', 'integer', 'exists:App\Sale,id']
         ]);
 
-        $transaction = new Transaction;
+        $sale = Sale::find($request->sale_id);
 
-        $transaction->qty = $request['qty'];
-        $transaction->totalPrice = $request['totalPrice'];
-        $transaction->currencyCode = $request['currencyCode'];
-        $transaction->currencySymbol = $request['currencySymbol'];
-        $transaction->product_id = $request['product_id'];
-        $transaction->sale_id = $request['sale_id'];
+        if($sale != null) {
+            if($sale->status == 1) {
+                $transaction = new Transaction;
 
-        $is_saved = $transaction->save();
+                $transaction->qty = $request['qty'];
+                $transaction->totalPrice = $request['totalPrice'];
+                $transaction->currencyCode = $request['currencyCode'];
+                $transaction->currencySymbol = $request['currencySymbol'];
+                $transaction->product_id = $request['product_id'];
+                $transaction->sale_id = $request['sale_id'];
 
-        if($is_saved){
-            return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+                $is_saved = $transaction->save();
+
+                if($is_saved) {
+                    return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+                } else {
+                    return response()->json(["code"=>400, "message"=>"Transaction failed to be recorded."]);
+                }
+            } else {
+                return response()->json(["code"=>400, "message"=>"Transaction refused to be recorded because the sale has ended."]);
+            }
+        }
+    }
+
+    public function endSales(Request $request)
+    {
+        $request->validate([
+            'sale_id' => ['required', 'integer', 'exists:App\Sale,id']
+        ]);
+
+        $sale = Sale::with('rel_transaction')->find($request->sale_id);
+
+        if($sale != null) {
+            // $sum = [];
+
+            // foreach ($sale->rel_transaction as $txn) {
+            //     if(array_key_exists($txn->product_id, $sum)) {
+            //         $sum[$txn->product_id]['qty'] += $txn->qty;
+            //         $sum[$txn->product_id]['totalPrice'] += $txn->totalPrice;
+            //     } else {
+            //         $sum[$txn->product_id]['qty'] = $txn->qty;
+            //         $sum[$txn->product_id]['totalPrice'] = $txn->totalPrice;
+            //     }
+            // }
+
+            $totSales = 0;
+
+            foreach ($sale->rel_transaction as $txn) {
+                $totSales += $txn->totalPrice;
+            }
+
+            $sale->status = 0;
+            $sale->profit = $totSales - $sale->cost;
+
+            if($sale->save()) {
+                return response()->json(
+                    [
+                        "code"=>200,
+                        "message"=>"Sale ended successfully.",
+                        "sale_id"=>$sale->id,
+                        "profit"=>$sale->profit,
+                        "status"=>$sale->status
+                    ]
+                );
+            } else {
+                return response()->json(["code"=>400, "message"=>"Failed to end sale."]);
+            }
         } else {
-            return response()->json(["code"=>400, "message"=>"Transaction record failed."]);
+            return response()->json(["code"=>400, "message"=>"Failed to find sale with given id."]);
         }
     }
 }

@@ -26,4 +26,8 @@ class Sale extends Model
         'status',
         'merchant_id'
     ];
+
+    public function rel_transaction() {
+        return $this->hasMany(Transaction::class,'sale_id','id');
+    }
 }

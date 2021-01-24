@@ -26,4 +26,8 @@ class Transaction extends Model
         'product_id',
         'sale_id'
     ];
+
+    public function rel_sale() {
+        return $this->belongsTo(Sale::class,'sale_id','id');
+    }
 }

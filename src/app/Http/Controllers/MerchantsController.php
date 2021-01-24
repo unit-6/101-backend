@@ -137,7 +137,6 @@ class MerchantsController extends Controller
     {
         $request->validate([
             'cost' => ['required', 'numeric', 'max:999999.99'],
-            'profit' => ['required', 'numeric', 'max:999999.99'],
             'currencyCode' => ['required', 'string', 'max:255'],
             'currencySymbol' => ['required', 'string', 'max:255'],
             'merchant_id' => ['required', 'string', 'exists:App\Merchant,key']
@@ -146,7 +145,7 @@ class MerchantsController extends Controller
         $sale = new Sale;
 
         $sale->cost = $request['cost'];
-        $sale->profit = $request['profit'];
+        $sale->profit = 0;
         $sale->currencyCode = $request['currencyCode'];
         $sale->currencySymbol = $request['currencySymbol'];
         $sale->status = 1;

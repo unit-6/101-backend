@@ -36,7 +36,7 @@ class MerchantsController extends Controller
         $is_saved = $merchant->save();
 
         if($is_saved){
-            return response()->json(["code"=>200, "message"=>"Merchant registered successfully."]);
+            return response()->json(["code"=>200, "message"=>"Merchant registered successfully.", "merchant_id"=>$merchant->key]);
         } else {
             return response()->json(["code"=>400, "message"=>"Merchant registration failed."]);
         }
@@ -155,7 +155,7 @@ class MerchantsController extends Controller
         $is_saved = $sale->save();
 
         if($is_saved){
-            return response()->json(["code"=>200, "message"=>"Sale created successfully."]);
+            return response()->json(["code"=>200, "message"=>"Sale created successfully.", "sale_id"=>$sale->id, "status"=>$sale->status]);
         } else {
             return response()->json(["code"=>400, "message"=>"Sale create failed."]);
         }
@@ -169,7 +169,7 @@ class MerchantsController extends Controller
             'currencyCode' => ['required', 'string', 'max:255'],
             'currencySymbol' => ['required', 'string', 'max:255'],
             'product_id' => ['required', 'integer', 'max:99999999999999999999'],
-            'sale_id' => ['required', 'integer', 'max:99999999999999999999']
+            'sale_id' => ['required', 'integer', 'exists:App\Sale,id']
         ]);
 
         $transaction = new Transaction;

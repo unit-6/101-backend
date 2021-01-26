@@ -285,7 +285,7 @@ class MerchantsController extends Controller
             }
 
             $totSales = $totProfit + $totCapital;
-            $capitalBal = 0;    // What is this?
+            // $capitalBal = 0;    // What is this?
 
             $durationObj = null;
             $durationObj = (object) $durationObj;
@@ -303,7 +303,7 @@ class MerchantsController extends Controller
                     "capital"=>$totCapital,
                     "sales"=>$totSales,
                     "profit"=>$totProfit,
-                    "capital_bal"=>$capitalBal,
+                    // "capital_bal"=>$capitalBal,
                     "duration"=>$durationObj
                 ]
             );

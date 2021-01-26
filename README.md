@@ -5,16 +5,15 @@ Laravel based small business inventory tracking using Docker Environment
 
 1. [Docker installed](https://docs.docker.com/docker-for-mac/install/)
 2. Clone repo `git@github.com:unit-6/101-backend.git`
-3. Check current exposed ports at docker-compose.yml, make sure all these ports can be used at localhost:- 
+3. Copy `docker-compose.yml.example` and rename to `docker-compose.yml.example`
+4. Check current exposed ports at docker-compose.yml, make sure all these ports can be used at localhost:- 
   - **nginx** - `:8080`
   - **mysql** - `:3306`
   - **php** - `:9000`
-4. Create `mysql` folder or `/mkdir mysql`
 5. Navigate in terminal to the cloned directory and run `docker-compose up -d`
 6. Run `docker ps` to check current container running:-
   
   ![docker-result](/docker-result.png)
-  
 7. Project URL:-
   - Laravel - `http://localhost:8080/`
   - phpmyadmin - `http://localhost:8081/`
@@ -37,6 +36,6 @@ Laravel project will be started at src folder. Three additional containers are i
 
 - `docker-compose run --rm composer install`
 - `docker-compose run --rm composer update`
-- `docker-compose run --rm npm run dev`
+- `docker-compose run --rm artisan key:generate`
 - `docker-compose run --rm artisan migrate`
 - `docker-compose run --rm artisan migrate:fresh --seed`

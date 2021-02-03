@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Merchant;
 
 class HomeController extends Controller
 {
@@ -33,7 +34,8 @@ class HomeController extends Controller
     {
         $data['title']  = 'Merchants';
         $data['active'] = '1';
-
+        $data['merchants'] = Merchant::all();
+        
         return view('pages.merchant', $data);
     }
 }

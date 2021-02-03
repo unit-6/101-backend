@@ -23,6 +23,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data['title']  = 'Dashboard';
+        $data['active'] = '0';
+
+        return view('pages.dashboard', $data);
+    }
+
+    public function merchant()
+    {
+        $data['title']  = 'Merchants';
+        $data['active'] = '1';
+
+        return view('pages.merchant', $data);
     }
 }

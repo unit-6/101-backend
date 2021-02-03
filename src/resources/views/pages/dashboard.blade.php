@@ -1,5 +1,3 @@
-<!-- THIS PAGE NO LONGER USE -->
-
 @extends('layouts.app')
 
 @section('content')
@@ -10,7 +8,7 @@
         </div>
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header">{{ __('app.Dashboard') }}</div>
+                <div class="card-header">{{ $title }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -19,7 +17,7 @@
                         </div>
                     @endif
 
-                    {{ __('app.You are logged in') }}, {{ Auth::user()->name }}!
+                    this is dashboard page
                 </div>
             </div>
         </div>

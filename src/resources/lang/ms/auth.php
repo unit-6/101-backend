@@ -15,5 +15,7 @@ return [
 
     'failed' => 'Butiran login tidak sepadan dengan rekod kami.',
     'throttle' => 'Cubaan login banyak kali. Sila cuba semula setelah :seconds saat.',
+    'regSuccess' => 'Pendaftaran berjaya. Hubungi admin untuk mengaktifkan akaun anda.',
+    'success' => 'Berjaya',
 
 ];

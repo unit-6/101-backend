@@ -18,6 +18,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Sweet Alert -->
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
 </head>
 <body>
     <div id="app">
@@ -76,5 +80,7 @@
             @yield('content')
         </main>
     </div>
+
+    @yield('body-js')
 </body>
 </html>

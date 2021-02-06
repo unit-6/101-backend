@@ -26,6 +26,9 @@ class HomeController extends Controller
     {
         $data['title']  = 'Dashboard';
         $data['active'] = '0';
+        $data['merchants'] = Merchant::all();
+        $data['androidp'] = Merchant::where('platform', 'Android')->get();
+        $data['iosp'] = Merchant::where('platform', 'iOS')->get();
 
         return view('pages.dashboard', $data);
     }

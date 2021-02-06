@@ -17,7 +17,19 @@
                         </div>
                     @endif
 
-                    this is dashboard page
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                            <div class="card-header bg-info">Total Merchant</div>
+                            <div class="card-body">
+                                <h3 class="card-title"><?=count($merchants)?></h3>
+                                <span class="badge bg-success text-white">Android: <?=count($androidp)?></span>
+                                <span class="badge bg-secondary text-white">iOS: <?=count($iosp)?></span>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

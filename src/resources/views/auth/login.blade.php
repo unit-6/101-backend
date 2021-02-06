@@ -78,6 +78,8 @@
 
     if(errType == 'inactive') {
         Swal.fire({
+            title: '{{ __("auth.error") }}!',
+            text: '{{ __("auth.notActive") }}',
             icon: 'error',
             allowOutsideClick: false
         })

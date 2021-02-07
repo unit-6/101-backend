@@ -19,3 +19,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/merchant', 'HomeController@merchant')->name('merchant');
+Route::get('/admin', 'HomeController@admin')->name('admin');

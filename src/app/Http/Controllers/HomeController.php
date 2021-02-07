@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Merchant;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -40,5 +42,16 @@ class HomeController extends Controller
         $data['merchants'] = Merchant::all();
         
         return view('pages.merchant', $data);
+    }
+
+    public function admin()
+    {
+        $data['title']  = 'Admins';
+        $data['active'] = '2';
+        $data['admins'] = User::all();
+
+        if(Auth::user()->isActive == '2'){
+            return view('pages.admin', $data);
+        } else return redirect()->route('home');
     }
 }

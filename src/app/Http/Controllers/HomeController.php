@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Merchant;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,32 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data['title']  = 'Dashboard';
+        $data['active'] = '0';
+        $data['merchants'] = Merchant::all();
+        $data['androidp'] = Merchant::where('platform', 'Android')->get();
+        $data['iosp'] = Merchant::where('platform', 'iOS')->get();
+
+        return view('pages.dashboard', $data);
+    }
+
+    public function merchant()
+    {
+        $data['title']  = 'Merchants';
+        $data['active'] = '1';
+        $data['merchants'] = Merchant::all();
+        
+        return view('pages.merchant', $data);
+    }
+
+    public function admin()
+    {
+        $data['title']  = 'Admins';
+        $data['active'] = '2';
+        $data['admins'] = User::all();
+
+        if(Auth::user()->isActive == '2'){
+            return view('pages.admin', $data);
+        } else return redirect()->route('home');
     }
 }

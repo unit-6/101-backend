@@ -23,7 +23,7 @@
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
 </head>
-<body>
+@guest <body> @else <body id="watermarked"> @endguest
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -55,7 +55,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->username }} <span class="caret"></span>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -80,6 +80,8 @@
             @yield('content')
         </main>
     </div>
+    
+    @guest @else @include('layouts.scripts') @endguest
 
     @yield('body-js')
 </body>

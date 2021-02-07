@@ -71,3 +71,25 @@
     </div>
 </div>
 @endsection
+
+@section('body-js')
+<script>
+    var errType = '{{ Session::has("loginFlash") ? Session::get("loginFlash") : null }}';
+
+    if(errType == 'inactive') {
+        Swal.fire({
+            title: '{{ __("auth.error") }}!',
+            text: '{{ __("auth.notActive") }}',
+            icon: 'error',
+            allowOutsideClick: false
+        })
+    } else if(errType == 'register') {
+        Swal.fire({
+            title: '{{ __("auth.success") }}!',
+            text: '{{ __("auth.regSuccess") }}',
+            icon: 'success',
+            allowOutsideClick: false
+        })
+    }
+</script>
+@endsection

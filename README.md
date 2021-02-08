@@ -54,4 +54,5 @@ Laravel project will be started at src folder. Three additional containers are i
 
 4. Create new branch from `Master` branch
 5. [Create pull request](https://github.com/unit-6/101-backend/pulls)
-6. Reviewer: [@miesaf](https://github.com/miesaf)
+6. Link pull request with issue using keyword: `closes` `<paste issue link here>`
+7. Reviewer: [@miesaf](https://github.com/miesaf)

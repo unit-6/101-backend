@@ -34,7 +34,11 @@
                                         <button id="act" type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                         <div class="dropdown-menu" aria-labelledby="act">
                                             <a class="dropdown-item" href="#">Details</a>
-                                            <a class="dropdown-item text-danger" href="#">Deactive</a>
+                                            <?php if($i->isActive == '1') {?>
+                                                <a class="dropdown-item text-danger merchant-deactive" data-id="{{ $i->id }}" href="">Deactive</a>
+                                            <?php } else {?>
+                                                <a class="dropdown-item text-success merchant-active" data-id="{{ $i->id }}" href="">Active</a>
+                                            <?php }?>
                                         </div>
                                     </div>
                                 </td>

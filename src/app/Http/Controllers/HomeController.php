@@ -54,4 +54,28 @@ class HomeController extends Controller
             return view('pages.admin', $data);
         } else return redirect()->route('home');
     }
+
+    public function merchant_deactive(Request $request)
+    {
+        if ($request->ajax()) {
+            $merchant = Merchant::where('id', $request->id)->first();
+
+            $merchant->isActive = '0';
+            $merchant->save();
+    
+            return response()->json(array('success' => true));
+        }
+    }
+
+    public function merchant_active(Request $request)
+    {
+        if ($request->ajax()) {
+            $merchant = Merchant::where('id', $request->id)->first();
+
+            $merchant->isActive = '1';
+            $merchant->save();
+    
+            return response()->json(array('success' => true));
+        }
+    }
 }

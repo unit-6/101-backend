@@ -39,3 +39,20 @@ Laravel project will be started at src folder. Three additional containers are i
 - `docker-compose run --rm artisan key:generate`
 - `docker-compose run --rm artisan migrate`
 - `docker-compose run --rm artisan migrate:fresh --seed`
+
+## Contribute to project
+
+1. [Create new issue](https://github.com/unit-6/101-backend/issues/new)
+2. Assignees: `tag youself`
+3. Labels:-
+
+- `to do` - Task not yet do (compulsory)
+- `doing` - Task start (compulsory)
+- `enhancement` - New feature (optional)
+- `bug` - Need fixing (optional)
+- `documentation` - improve documents (optional)
+
+4. Create new branch from `Master` branch
+5. [Create pull request](https://github.com/unit-6/101-backend/pulls)
+6. Link pull request with issue using keyword: `closes` `<paste issue link here>`
+7. Reviewer: [@miesaf](https://github.com/miesaf)

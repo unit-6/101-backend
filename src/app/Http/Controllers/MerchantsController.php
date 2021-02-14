@@ -165,7 +165,6 @@ class MerchantsController extends Controller
     {
         $request->validate([
             'qty' => ['required', 'integer', 'max:99999999999'],
-            'totalPrice' => ['required', 'numeric', 'max:999999.99'],
             'currencyCode' => ['required', 'string', 'max:255'],
             'currencySymbol' => ['required', 'string', 'max:255'],
             'product_id' => ['required', 'integer', 'exists:App\Product,id'],
@@ -176,21 +175,27 @@ class MerchantsController extends Controller
 
         if($sale != null) {
             if($sale->status == 1) {
-                $transaction = new Transaction;
+                $product = Product::find($request->product_id);
 
-                $transaction->qty = $request['qty'];
-                $transaction->totalPrice = $request['totalPrice'];
-                $transaction->currencyCode = $request['currencyCode'];
-                $transaction->currencySymbol = $request['currencySymbol'];
-                $transaction->product_id = $request['product_id'];
-                $transaction->sale_id = $request['sale_id'];
+                if($product != null) {
+                    $transaction = new Transaction;
 
-                $is_saved = $transaction->save();
+                    $transaction->qty = $request['qty'];
+                    $transaction->totalPrice = $product->salesPrice * $request['qty'];
+                    $transaction->currencyCode = $request['currencyCode'];
+                    $transaction->currencySymbol = $request['currencySymbol'];
+                    $transaction->product_id = $request['product_id'];
+                    $transaction->sale_id = $request['sale_id'];
 
-                if($is_saved) {
-                    return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+                    $is_saved = $transaction->save();
+
+                    if($is_saved) {
+                        return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+                    } else {
+                        return response()->json(["code"=>400, "message"=>"Transaction failed to be recorded."]);
+                    }
                 } else {
-                    return response()->json(["code"=>400, "message"=>"Transaction failed to be recorded."]);
+                    return response()->json(["code"=>400, "message"=>"Product id not found."]);
                 }
             } else {
                 return response()->json(["code"=>400, "message"=>"Transaction refused to be recorded because the sale has ended."]);

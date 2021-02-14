@@ -20,3 +20,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/merchant', 'HomeController@merchant')->name('merchant');
 Route::get('/admin', 'HomeController@admin')->name('admin');
+
+Route::post('/merchant_deactive', 'HomeController@merchant_deactive')->name('merchant_deactive');
+Route::post('/merchant_active', 'HomeController@merchant_active')->name('merchant_active');

@@ -16,7 +16,7 @@ class MerchantsController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'udid' => ['required', 'string', 'max:255', 'unique:merchants'],
+            'udid' => ['required', 'string', 'max:255'],
             'phoneModel' => ['required', 'string', 'max:255'],
             'osVersion' => ['required', 'string', 'max:255'],
             'platform' => ['required', 'string', 'max:255'],

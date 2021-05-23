@@ -14,7 +14,7 @@ class RemoveUniqueFromUDID extends Migration
     public function up()
     {
         Schema::table('merchants', function (Blueprint $table) {
-            $table->dropUnique('udid');
+            $table->dropUnique('merchants_udid_unique');
         });
     }
 

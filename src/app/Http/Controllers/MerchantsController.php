@@ -84,11 +84,13 @@ class MerchantsController extends Controller
         $total = $product->count();
 
         $sales = SALE::where('merchant_id', $request->merchant_id)->where('status', true)->get();
-
         $t_sales = 0;
-        while($sales) {
-            $t_sales += $sales->profit;
-        }
+
+        if($sales->count() > 0) {
+            while($sales) {
+                $t_sales += $sales->profit;
+            }
+        } 
 
         if($total > 0){
             return response()->json(["code"=>200, "message"=>"Product listed successfully.", "data"=>$product, "total"=>$total, "total_profit"=>$t_sales]);

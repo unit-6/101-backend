@@ -83,7 +83,7 @@ class MerchantsController extends Controller
         $product = Product::where('merchant_id', $request->merchant_id)->get();
         $total = $product->count();
 
-        $sales = SALE::where('merchant_id', $request->merchant_id)->where('status', true)->get();
+        $sales = Sale::where('merchant_id', $request->merchant_id)->where('status', true)->get();
         $t_sales = 0;
 
         if($sales->count() > 0) {

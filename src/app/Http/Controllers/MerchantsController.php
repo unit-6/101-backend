@@ -10,6 +10,7 @@ use App\Sale;
 use App\Transaction;
 use DateTime;
 use Str;
+use DB;
 
 class MerchantsController extends Controller
 {
@@ -171,6 +172,8 @@ class MerchantsController extends Controller
             'sale_id' => ['required', 'integer', 'exists:App\Sale,id']
         ]);
 
+        DB::beginTransaction();
+
         $sale = Sale::find($request->sale_id);
 
         if($sale != null) {
@@ -189,9 +192,15 @@ class MerchantsController extends Controller
 
                     $is_saved = $transaction->save();
 
-                    if($is_saved) {
+                    // Update quantity balance in product table
+                    $product->stockQty = $product->stockQty - $request['qty'];
+                    $is_saved_2 = $product->save();
+
+                    if($is_saved && $is_saved_2) {
+                        DB::commit();
                         return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
                     } else {
+                        DB::rollBack();
                         return response()->json(["code"=>400, "message"=>"Transaction failed to be recorded."]);
                     }
                 } else {

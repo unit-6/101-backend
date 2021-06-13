@@ -83,12 +83,12 @@ class MerchantsController extends Controller
         $product = Product::where('merchant_id', $request->merchant_id)->get();
         $total = $product->count();
 
-        $sales = Sale::where('merchant_id', $request->merchant_id)->where('status', true)->get();
+        $sales = Sale::where('merchant_id', $request->merchant_id)->get();
         $t_sales = 0;
 
         if($sales->count() > 0) {
-            while($sales) {
-                $t_sales += $sales->profit;
+            foreach ($sales as $key => $sale) {
+                $t_sales += $sale->profit;
             }
         } 
 

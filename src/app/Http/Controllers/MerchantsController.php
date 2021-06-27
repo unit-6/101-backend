@@ -58,7 +58,7 @@ class MerchantsController extends Controller
         $product = new Product;
 
         $product->name = $request['name'];
-        $product->salesPrice = $request['salesPrice'];
+        $product->salesPrice = number_format($request['salesPrice'],2);
         $product->currencyCode = $request['currencyCode'];
         $product->currencySymbol = $request['currencySymbol'];
         $product->stockQty = $request['stockQty'];
@@ -93,7 +93,7 @@ class MerchantsController extends Controller
         } 
 
         if($total > 0){
-            return response()->json(["code"=>200, "message"=>"Product listed successfully.", "data"=>$product, "total"=>$total, "total_profit"=>$t_sales]);
+            return response()->json(["code"=>200, "message"=>"Product listed successfully.", "data"=>$product, "total"=>$total, "total_profit"=>number_format($t_sales, 2)]);
         } else {
             return response()->json(["code"=>400, "message"=>"This merchant has no product registered."]);
         }
@@ -129,7 +129,7 @@ class MerchantsController extends Controller
         $product = Product::find($request->id);
 
         $product->name = $request['name'];
-        $product->salesPrice = $request['salesPrice'];
+        $product->salesPrice = number_format($request['salesPrice'], 2);
         $product->currencyCode = $request['currencyCode'];
         $product->currencySymbol = $request['currencySymbol'];
         $product->stockQty = $request['stockQty'];
@@ -155,7 +155,7 @@ class MerchantsController extends Controller
 
         $sale = new Sale;
 
-        $sale->cost = $request['cost'];
+        $sale->cost = number_format($request['cost'], 2);
         $sale->profit = 0;
         $sale->currencyCode = $request['currencyCode'];
         $sale->currencySymbol = $request['currencySymbol'];
@@ -190,27 +190,31 @@ class MerchantsController extends Controller
                 $product = Product::find($request->product_id);
 
                 if($product != null) {
-                    $transaction = new Transaction;
+                    if($product->stockQty > 0) {
+                        $transaction = new Transaction;
 
-                    $transaction->qty = $request['qty'];
-                    $transaction->totalPrice = $product->salesPrice * $request['qty'];
-                    $transaction->currencyCode = $request['currencyCode'];
-                    $transaction->currencySymbol = $request['currencySymbol'];
-                    $transaction->product_id = $request['product_id'];
-                    $transaction->sale_id = $request['sale_id'];
+                        $transaction->qty = $request['qty'];
+                        $transaction->totalPrice = number_format($product->salesPrice * $request['qty'], 2);
+                        $transaction->currencyCode = $request['currencyCode'];
+                        $transaction->currencySymbol = $request['currencySymbol'];
+                        $transaction->product_id = $request['product_id'];
+                        $transaction->sale_id = $request['sale_id'];
 
-                    $is_saved = $transaction->save();
+                        $is_saved = $transaction->save();
 
-                    // Update quantity balance in product table
-                    $product->stockQty = $product->stockQty - $request['qty'];
-                    $is_saved_2 = $product->save();
+                        // Update quantity balance in product table
+                        $product->stockQty = $product->stockQty - $request['qty'];
+                        $is_saved_2 = $product->save();
 
-                    if($is_saved && $is_saved_2) {
-                        DB::commit();
-                        return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+                        if($is_saved && $is_saved_2) {
+                            DB::commit();
+                            return response()->json(["code"=>200, "message"=>"Transaction recorded successfully."]);
+                        } else {
+                            DB::rollBack();
+                            return response()->json(["code"=>400, "message"=>"Transaction failed to be recorded."]);
+                        }
                     } else {
-                        DB::rollBack();
-                        return response()->json(["code"=>400, "message"=>"Transaction failed to be recorded."]);
+                        return response()->json(["code"=>400, "message"=>"Quantity exceeded current stock available."]);
                     }
                 } else {
                     return response()->json(["code"=>400, "message"=>"Product id not found."]);
@@ -257,7 +261,7 @@ class MerchantsController extends Controller
                         "code"=>200,
                         "message"=>"Sale ended successfully.",
                         "sale_id"=>$sale->id,
-                        "profit"=>$sale->profit,
+                        "profit"=>number_format($sale->profit, 2),
                         "status"=>$sale->status
                     ]
                 );
@@ -323,9 +327,9 @@ class MerchantsController extends Controller
                 [
                     "code"=>200,
                     "message"=>"Ended sale(s) found for/between the specified date(s).",
-                    "capital"=>$totCapital,
-                    "sales"=>$totSales,
-                    "profit"=>$totProfit,
+                    "capital"=>number_format($totCapital, 2),
+                    "sales"=>number_format($totSales, 2),
+                    "profit"=>number_format($totProfit, 2),
                     // "capital_bal"=>$capitalBal,
                     "duration"=>$durationObj
                 ]

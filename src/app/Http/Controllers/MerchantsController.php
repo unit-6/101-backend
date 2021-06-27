@@ -190,7 +190,7 @@ class MerchantsController extends Controller
                 $product = Product::find($request->product_id);
 
                 if($product != null) {
-                    if($product->stockQty > 0) {
+                    if($product->stockQty > $request['qty']) {
                         $transaction = new Transaction;
 
                         $transaction->qty = $request['qty'];
